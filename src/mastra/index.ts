@@ -7,7 +7,7 @@ import { toolCallAppropriatenessScorer, completenessScorer, translationScorer } 
 import { ragDestinationsWorkflow } from './workflows/destination-rag';
 
 export const mastra = new Mastra({
-  workflows: { ragDestinationsWorkflow },
+  workflows: {  },
   agents: { travelAgent },
   scorers: { toolCallAppropriatenessScorer, completenessScorer, translationScorer },
   storage: new LibSQLStore({
