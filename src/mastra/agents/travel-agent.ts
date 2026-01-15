@@ -1,7 +1,7 @@
 import { Agent } from '@mastra/core/agent';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
-import { weatherTool } from '../tools/weather-tool';
+import { ragDestinationsWorkflow } from '../workflows/destination-rag';
 import { scorers } from '../scorers/weather-scorer';
 import z from 'zod';
 
@@ -40,6 +40,9 @@ export const travelAgent = new Agent({
         rate: 1,
       },
     },
+  },
+  workflows:{
+    ragDestinationsWorkflow
   },
   memory: new Memory({
     storage: new LibSQLStore({

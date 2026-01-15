@@ -8,8 +8,8 @@ const model = mistral("codestral-latest")
 
 const destinationSchema = z.object({
   nom: z.string(),
-  labels: z.object,
-  accessibleHandicap: z.boolean
+  labels: z.array(z.string()),
+  accessibleHandicap: z.string()
 })
 
 const userQuestionSchema = z.object({
@@ -96,7 +96,7 @@ const prompt = `
 
 })
 
-const ragWorkflow = createWorkflow({
+const ragDestinationsWorkflow = createWorkflow({
   id: "rag",
   inputSchema: userQuestionSchema,
   outputSchema: augmentedQuerySchema,
@@ -105,6 +105,6 @@ const ragWorkflow = createWorkflow({
   .then(augmentedGeneration)
 
 
-ragWorkflow.commit()
+ragDestinationsWorkflow.commit()
 
-export { ragWorkflow };
+export { ragDestinationsWorkflow };
