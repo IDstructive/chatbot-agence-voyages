@@ -4,7 +4,6 @@ import { LibSQLStore } from '@mastra/libsql';
 import { ragDestinationsWorkflow } from '../workflows/destination-rag';
 import { scorers } from '../scorers/weather-scorer';
 import z from 'zod';
-import { destinations } from './destinations-catalog';
 
 export const travelAgent = new Agent({
   name: 'Travel agent',
