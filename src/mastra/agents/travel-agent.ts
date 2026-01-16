@@ -4,6 +4,7 @@ import { LibSQLStore } from '@mastra/libsql';
 import { ragDestinationsWorkflow } from '../workflows/destination-rag';
 import { scorers } from '../scorers/weather-scorer';
 import z from 'zod';
+import { destinations } from './destinations-catalog';
 
 export const travelAgent = new Agent({
   name: 'Travel agent',
@@ -76,6 +77,7 @@ export const travelAgent = new Agent({
   },
   workflows:{
   },
+  // tool:{ destination-catalog }
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../mastra.db', // path is relative to the .mastra/output directory
