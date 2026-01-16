@@ -64,6 +64,7 @@ export const travelAgent = new Agent({
      {
       workingMemory: {
         enabled: true,
+        scope: 'thread',
         schema: 
           z.object({
             preferences: z.object({
