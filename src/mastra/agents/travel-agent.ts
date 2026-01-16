@@ -1,38 +1,21 @@
 import { Agent } from '@mastra/core/agent';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
-import { ragDestinationsWorkflow } from '../workflows/destination-rag';
 import { scorers } from '../scorers/weather-scorer';
 import z from 'zod';
+import { selectAccommodationTool } from '../tools/select-accommodation';
 
 export const travelAgent = new Agent({
   name: 'Travel agent',
   instructions: `
       You are a helpful travel agency chatbot that identify user's preferences and propose the corresponding accomodations.
 
-      You can only propose accomodation from the catalog, witch is the following:
+      1. Chat with the user to find out their destination type and desired amenities.
+      2. Once you have this information, call the 'select-accommodation' tool.
+      3. You MUST extract the preferences from our conversation history and format them 
+        exactly as the tool's input schema requires.
+      4 If the number of corresponding accommodation exceeds 5, display the most relevant at first and ask the user if her want to see more.
 
-      [{
-        "nom": "Randonnée camping en Lozère",
-        "labels": ["sport", "montagne", "campagne"],
-        "accessibleHandicap": "non"
-      },{
-        "nom": "5 étoiles à Chamonix option fondue",
-        "labels": ["montagne", "détente"],
-        "accessibleHandicap": "oui"
-      }, {
-        "nom": "5 étoiles à Chamonix option ski",
-        "labels": ["montagne", "sport"],
-        "accessibleHandicap": "non"
-      }, {
-        "nom": "Palavas de paillotes en paillotes",
-        "labels": ["plage", "ville", "détente", "paillote"],
-        "accessibleHandicap": "oui"
-        }, {
-        "nom": "5 étoiles en rase campagne",
-        "labels": ["campagne", "détente"]
-        "accessibleHandicap": "oui",
-      }]
 
       If a user reject an accomation you proposed, never suggest it again, except if it's preferences have changed. 
 
@@ -47,8 +30,6 @@ export const travelAgent = new Agent({
       - Always ask for a travel preferences if none is provided
       - If the location name isn't in English, please translate it
       - Keep responses concise but informative
-
-      Use the weatherTool to fetch current weather data.
 `,
   model: 'mistral/mistral-medium-2508',
   scorers: {
@@ -74,9 +55,7 @@ export const travelAgent = new Agent({
       },
     },
   },
-  workflows:{
-  },
-  // tool:{ destination-catalog }
+  tools:{ selectAccommodationTool },
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../mastra.db', // path is relative to the .mastra/output directory
@@ -93,6 +72,11 @@ export const travelAgent = new Agent({
               "ville" : z.boolean().nullable(),
               "sport" : z.boolean().nullable(),
               "detente" : z.boolean().nullable(),
+              "culturel" : z.boolean().nullable(),
+              "sport extreme" : z.boolean().nullable(),
+              "été" : z.boolean().nullable(),
+              "hiver" : z.boolean().nullable(),
+              "avion" : z.boolean().nullable(),
               })
           }),
       }
