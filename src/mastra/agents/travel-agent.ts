@@ -1,9 +1,11 @@
 import { Agent } from '@mastra/core/agent';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
-import { scorers } from '../scorers/weather-scorer';
-import z from 'zod';
 import { selectAccommodationTool } from '../tools/select-accommodation';
+import { PreferenceSchema } from '../tools/select-accommodation'
+
+const preferenceSchema = PreferenceSchema
+
 
 export const travelAgent = new Agent({
   name: 'Travel agent',
@@ -32,29 +34,6 @@ export const travelAgent = new Agent({
       - Keep responses concise but informative
 `,
   model: 'mistral/mistral-medium-2508',
-  scorers: {
-    toolCallAppropriateness: {
-      scorer: scorers.toolCallAppropriatenessScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-    completeness: {
-      scorer: scorers.completenessScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-    translation: {
-      scorer: scorers.translationScorer,
-      sampling: {
-        type: 'ratio',
-        rate: 1,
-      },
-    },
-  },
   tools:{ selectAccommodationTool },
   memory: new Memory({
     storage: new LibSQLStore({
@@ -65,21 +44,7 @@ export const travelAgent = new Agent({
       workingMemory: {
         enabled: true,
         scope: 'thread',
-        schema: 
-          z.object({
-            preferences: z.object({
-              "plage" : z.boolean().nullable(),
-              "montagne" : z.boolean().nullable(),
-              "ville" : z.boolean().nullable(),
-              "sport" : z.boolean().nullable(),
-              "detente" : z.boolean().nullable(),
-              "culturel" : z.boolean().nullable(),
-              "sport extreme" : z.boolean().nullable(),
-              "été" : z.boolean().nullable(),
-              "hiver" : z.boolean().nullable(),
-              "avion" : z.boolean().nullable(),
-              })
-          }),
+        schema: preferenceSchema
       }
     },
   }),

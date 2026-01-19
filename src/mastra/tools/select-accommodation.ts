@@ -4,17 +4,13 @@ import { destinations } from './destinations-catalog';
 
 const catalog = destinations
 
-const PreferenceSchema = z.object({
+export const PreferenceSchema = z.object({
         "plage" : z.boolean().nullable(),
         "montagne" : z.boolean().nullable(),
         "ville" : z.boolean().nullable(),
         "sport" : z.boolean().nullable(),
         "detente" : z.boolean().nullable(),
-        "culturel" : z.boolean().nullable(),
-        "sport extreme" : z.boolean().nullable(),
-        "été" : z.boolean().nullable(),
-        "hiver" : z.boolean().nullable(),
-        "avion" : z.boolean().nullable(),
+        "acces_handicap" : z.boolean().nullable(),
     });
 
 export const selectAccommodationTool = createTool({
