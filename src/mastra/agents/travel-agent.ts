@@ -4,7 +4,7 @@ import { LibSQLStore } from '@mastra/libsql';
 import { selectAccommodationTool } from '../tools/select-accommodation';
 import { PreferenceSchema } from '../tools/select-accommodation'
 
-const preferenceSchema = PreferenceSchema
+const preferenceSchema = PreferenceSchema;
 
 
 export const travelAgent = new Agent({
