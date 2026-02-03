@@ -30,10 +30,14 @@ export const selectAccommodationTool = createTool({
       return [];
     }
 
-    const selection = catalog.filter(destination => 
+    let selection = catalog.filter(destination => 
       activePreferences.some(pref => destination.labels.includes(pref))
     );
-    
+
+    if (activePreferences.includes("acces_handicap")) {
+      selection = selection.filter(destination => destination.accessibleHandicap)
+    }
+
     return selection;
   },
 });
